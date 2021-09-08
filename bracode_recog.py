@@ -1,5 +1,5 @@
 import cv2
-import pyzbar.pyzbar as pyzbar
+from pyzbar import pyzbar
 import numpy as np
 
 """
