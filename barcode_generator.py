@@ -2,11 +2,13 @@ from barcode import EAN13
 from barcode.writer import ImageWriter
 import random
 import shutil
-
+#311 * 80
 #main location, user barcode directory, ecobag barcode directory
 src = './'
 dir_u = './barcode_user/'
 dir_e = './barcode_ecobag/'
+opt ={"module_width":0.35, "module_height":10, "font_size": 0, "text_distance": -3, "quiet_zone": 1}
+
 
 #GET Unique Barcode Number for User
 def generate_number_user(phone) -> str:
@@ -40,7 +42,7 @@ def locate_ecobag_barcode(generate_code,type):
 def generate_barcode_user_png(phone) -> str:
     generate_num = generate_number_user(phone)
     generate_code = EAN13(generate_num, writer=ImageWriter())
-    generate_code.save(generate_code)
+    generate_code.save(generate_code,opt)
     locate_user_barcode(generate_code,'.png')
     return str(generate_code)
 
@@ -48,7 +50,7 @@ def generate_barcode_user_png(phone) -> str:
 def generate_barcode_user_svg(phone) -> str:
     generate_num = generate_number_user(phone)
     generate_code = EAN13(generate_num)
-    generate_code.save(generate_code)
+    generate_code.save(generate_code,opt)
     locate_user_barcode(generate_code,'.svg')
     return str(generate_code)
 
@@ -58,14 +60,17 @@ def generate_barcode_user_svg(phone) -> str:
 def generate_barcode_ecobag_svg() -> str:
     generate_num = generate_number_market()
     generate_code = EAN13(generate_num)
-    generate_code.save(generate_code)
+    generate_code.save(generate_code,opt)
     locate_ecobag_barcode(generate_code,'.svg')
     return str(generate_code)
 
 #Generate barcode for Ecobag
+
 def generate_barcode_ecobag_png() -> str:
     generate_num = generate_number_market()
     generate_code = EAN13(generate_num,writer=ImageWriter())
-    generate_code.save(generate_code)
+    generate_code.save(generate_code,opt)
     locate_ecobag_barcode(generate_code,'.png')
     return str(generate_code)
+
+generate_barcode_ecobag_png()
