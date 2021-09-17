@@ -1,13 +1,17 @@
 import cv2
-import numpy as np
+import requests, json
 from pyzbar.pyzbar import decode
 from playsound import playsound
-
+def space():
+    print('-' * 24)
 print('library loaded')
-print('-'*24)
+space()
 Market_id_ = 'market-0001'
 print("Market id is "+ Market_id_)
-print('-'*24)
+space()
+URL = "http://pwnable.co.kr:8000/market_rent/"
+
+
 
 try:
     cam = cv2.VideoCapture(0)
@@ -37,7 +41,7 @@ if __name__ == "__main__":
         gray_scale = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
 
         #face Recognition
-        faces = face_cascade.detectMultiScale(gray_scale, scaleFactor=1.3, minNeighbors=5, minSize=(30, 30))
+        faces = face_cascade.detectMultiScale(gray_scale, scaleFactor=1.1, minNeighbors=3, minSize=(30, 30))
         #balance, ftf min pixel, min f size
 
         for (x, y, w, h) in faces:
@@ -81,10 +85,22 @@ if __name__ == "__main__":
             else:
                 user_ = barcode2
                 ecobag_ = barcode1
-            print('-'*24)
-            print("USER : " + user_.data.decode('utf-8'))
+            space()
+            print("USER : " + user_.data.decode('utf-8')[:-2])
             print("ECOBAG : " + ecobag_.data.decode('utf-8'))
             print("MARKET : " + Market_id_)
+            data = {"Mid"  : str(Market_id_),
+                    "phone": str(user_.data.decode('utf-8')[:-2]),
+                    "Eid"  : str(ecobag_.data.decode('utf-8'))
+                    }
+
+            try:
+                res = requests.post(URL,data=json.dumps(data))
+                space()
+                print(res)
+            except:
+                space()
+                print('POST ERROR')
             check = 0
             barcodes = []
 
