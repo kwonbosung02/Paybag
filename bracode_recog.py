@@ -13,7 +13,10 @@ if __name__ == "__main__":
         ret, frame = cam.read()
 
         barcodes = decode(frame)
-        print(barcodes)
+
+        if len(barcodes) != 0:
+            barcode = barcodes[0]
+
         cv2.imshow('main camera', frame)
 
 
