@@ -1,9 +1,8 @@
 import cv2
-print("cv2 loaded")
 from pyzbar.pyzbar import decode
-print("pyzbar loaded")
+from playsound import playsound
 
-
+print('library loaded')
 
 cam = cv2.VideoCapture(0)
 
@@ -16,6 +15,9 @@ if __name__ == "__main__":
 
         if len(barcodes) != 0:
             barcode = barcodes[0]
+            print(barcode.data)
+            playsound("in2.mp3")
+            playsound("in2.mp3")
 
         cv2.imshow('main camera', frame)
 
