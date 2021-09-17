@@ -4,6 +4,10 @@ from pyzbar.pyzbar import decode
 from playsound import playsound
 
 print('library loaded')
+print('-'*24)
+Market_id_ = 'market-0001'
+print("Market id is "+ Market_id_)
+print('-'*24)
 
 try:
     cam = cv2.VideoCapture(0)
@@ -17,16 +21,19 @@ if __name__ == "__main__":
     resize_h = int(0.3*mask_h)
     resize_w = int(0.3*mask_w)
     resize_mask = cv2.resize(mask,(resize_w,resize_h), interpolation=cv2.INTER_CUBIC)
-    print(resize_mask.shape)
+
     mask = cv2.cvtColor(resize_mask, cv2.COLOR_BGR2GRAY)
     mask[mask[:] >= 200] = 0
     mask[mask[:] > 0] = 255
     mask_inv = cv2.bitwise_not(mask)
     cap = cv2.bitwise_and(resize_mask, resize_mask, mask=mask)
-
+    barcode1 = ''
+    barcode2 = ''
+    check = 0
     while(True):
 
         ret, frame = cam.read()
+
         gray_scale = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
 
         #face Recognition
@@ -52,9 +59,34 @@ if __name__ == "__main__":
 
         if len(barcodes) != 0:
             barcode = barcodes[0]
-            print(barcode.data)
+
             playsound("./sound/in2.mp3")
             playsound("./sound/in2.mp3")
+            check = check + 1
+            if(check == 1):
+                barcode1 = barcode
+                print(barcode1.data.decode('utf-8'))
+            if(check == 2):
+                barcode2 = barcode
+                print(barcode2.data.decode('utf-8'))
+            barcodes = []
+
+        if(check == 2):
+            print("two barcodes are collected")
+            user_ = ''
+            ecobag_ = ''
+            if barcode1.data.decode('utf-8')[0:3] == '010':
+                user_ = barcode1
+                ecobag_ = barcode2
+            else:
+                user_ = barcode2
+                ecobag_ = barcode1
+            print('-'*24)
+            print("USER : " + user_.data.decode('utf-8'))
+            print("ECOBAG : " + ecobag_.data.decode('utf-8'))
+            print("MARKET : " + Market_id_)
+            check = 0
+            barcodes = []
 
         cv2.imshow('main camera', frame)
 
