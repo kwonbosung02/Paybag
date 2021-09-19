@@ -94,6 +94,21 @@ if __name__ == "__main__":
                 barcode2 = barcode
                 print(barcode2.data.decode('utf-8'))
             barcodes = []
+        # --before post, check if barcodes are valid--
+        if(check == 2):
+            if (barcode1.data.decode('utf-8')[0:3] == '010' and barcode2.data.decode('utf-8')[0:3] == '010'):
+                space()
+                print("Two barcodes are user barcode -ERROR-")
+                barcode1 = None
+                barcode2 = None
+                check = 0
+
+            elif (barcode1.data.decode('utf-8')[0:3] != '010' and barcode2.data.decode('utf-8')[0:3] != '010'):
+                space()
+                print("Two barcodes are ecobag barcode -ERROR-")
+                barcode1 = None
+                barcode2 = None
+                check = 0
 
         # --------------post-----------------
         if(check == 2):
